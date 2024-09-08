@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:novel_reader/constants.dart';
+import 'package:novel_reader/controllers/app_bindings.dart';
+import 'package:novel_reader/pages/LoginPage.dart';
 
 void main() {
+  AppBindings().dependencies();
   runApp(NovelReader());
 }
 
-class NovelReader extends StatefulWidget{
+class NovelReader extends StatelessWidget {
 
-
-
-  @override
-  State<NovelReader> createState() => _NovelReaderState();
-}
-
-class _NovelReaderState extends State<NovelReader> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    asyncInit();
-    super.initState();
-  }
-  Future<void> asyncInit() async{
-
-  }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: Scaffold(
-        body: Placeholder(),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(),
     );
   }
 }
