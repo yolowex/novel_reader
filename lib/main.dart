@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:novel_reader/controllers/app_bindings.dart';
-import 'package:novel_reader/pages/LoginPage.dart';
+import 'package:novel_reader/pages/login_page.dart';
 
 void main() {
   AppBindings().dependencies();
