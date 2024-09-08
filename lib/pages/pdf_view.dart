@@ -37,17 +37,15 @@ class PdfView extends StatelessWidget{
             ),
           ),
           Expanded(
-            child: Container(
-              width: double.infinity,
-              color: Colors.grey.shade500,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(() => Text(controller.contentString.value)),
-                ],
-              ),
-            
+            child: ListView(
+              children: [
+                Container(
+                  width: double.infinity,
+                  color: Colors.grey.shade500,
+                  child: Obx(() => Center(child: Text(controller.contentString.value))),
+
+                ),
+              ],
             ),
           ),
           Container(
