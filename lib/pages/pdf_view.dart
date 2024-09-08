@@ -4,12 +4,9 @@ import 'package:novel_reader/controllers/pdf_view_controller.dart';
 
 import '../controllers/login_page_controller.dart';
 
-
-
-class PdfView extends StatelessWidget{
+class PdfView extends StatelessWidget {
   var loginController = Get.find<LoginPageController>();
   var controller = Get.find<PdfViewController>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +23,18 @@ class PdfView extends StatelessWidget{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.navigate_before),),
-                      Text("${controller.selectedPdfPage}  /  ${loginController.selectedPdfTotalPages}"),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.navigate_next),),
+                      IconButton(
+                        onPressed: controller.onPrevious,
+                        icon: const Icon(Icons.navigate_before),
+                      ),
+                      Obx(
+                        () => Text(
+                            "${controller.selectedPdfPage}  /  ${loginController.selectedPdfTotalPages}",),
+                      ),
+                      IconButton(
+                        onPressed: controller.onNext,
+                        icon: const Icon(Icons.navigate_next),
+                      ),
                     ],
                   ),
                 ),
@@ -38,12 +44,16 @@ class PdfView extends StatelessWidget{
           ),
           Expanded(
             child: ListView(
+              controller: controller.contentScrollController,
               children: [
                 Container(
                   width: double.infinity,
                   color: Colors.grey.shade500,
-                  child: Obx(() => Center(child: Text(controller.contentString.value))),
-
+                  child: Obx(
+                    () => Center(
+                      child: Text(controller.contentString.value),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -52,11 +62,9 @@ class PdfView extends StatelessWidget{
             width: double.infinity,
             color: Colors.blue,
             child: Text("Footer"),
-
           ),
         ],
       ),
     );
   }
 }
-
