@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -140,8 +141,155 @@ class PdfView extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildPdfContent() {
+    return Expanded(
+      child: ListView(
+        controller: controller.contentScrollController,
+        children: [
+          Container(
+            width: double.infinity,
+            color: Colors.grey.shade500,
+            child: Obx(
+                  () {
+                // Split the content string into words
+                List<String> words = controller.contentString.value.split(' ');
+
+                // Create a list of TextSpans for each word
+                List<TextSpan> textSpans = words.map((word) {
+                  // Check if the word is "Harry"
+                  bool isHarry = word.toLowerCase() == 'harry';
+                  var paint = Paint();
+                  paint.color = Colors.yellow;
+
+                  return TextSpan(
+                    text: word + ' ', // Add a space after each word
+                    style: controller.contentTextStyle.copyWith(
+                      fontSize: controller.contentTextFontSize.value,
+                      background: isHarry?  paint: null // Highlight background for "Harry"
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Print the clicked word
+                        print(word);
+                      },
+                  );
+                }).toList();
+
+                return Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: textSpans,
+                      style: controller.contentTextStyle.copyWith(
+                        fontSize: controller.contentTextFontSize.value,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPdfContent02() {
+    return Expanded(
+      child: ListView(
+        controller: controller.contentScrollController,
+        children: [
+          Container(
+            width: double.infinity,
+            color: Colors.grey.shade500,
+            child: Obx(
+                  () {
+                // Split the content string into words
+                List<String> words = controller.contentString.value.split(' ');
+
+                // Create a list of TextSpans for each word
+                List<TextSpan> textSpans = words.map((word) {
+                  // Check if the word is "Harry"
+                  bool isHarry = word.toLowerCase() == 'harry';
+
+                  return TextSpan(
+                    text: word + ' ', // Add a space after each word
+                    style: controller.contentTextStyle.copyWith(
+                      fontSize: controller.contentTextFontSize.value,
+                      color: isHarry ? Colors.yellow : null, // Highlight "Harry" in yellow
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Print the clicked word
+                        print(word);
+                      },
+                  );
+                }).toList();
+
+                return Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: textSpans,
+                      style: controller.contentTextStyle.copyWith(
+                        fontSize: controller.contentTextFontSize.value,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPdfContent01() {
+    return Expanded(
+      child: ListView(
+        controller: controller.contentScrollController,
+        children: [
+          Container(
+            width: double.infinity,
+            color: Colors.grey.shade500,
+            child: Obx(
+                  () {
+                // Split the content string into words
+                List<String> words = controller.contentString.value.split(' ');
+
+                // Create a list of TextSpans for each word
+                List<TextSpan> textSpans = words.map((word) {
+                  return TextSpan(
+                    text: word + ' ', // Add a space after each word
+                    style: controller.contentTextStyle.copyWith(
+                      fontSize: controller.contentTextFontSize.value,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Print the clicked word
+                        print(word);
+                      },
+                  );
+                }).toList();
+
+                return Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: textSpans,
+                      style: controller.contentTextStyle.copyWith(
+                        fontSize: controller.contentTextFontSize.value,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPdfContent0() {
     return Expanded(
       child: ListView(
         controller: controller.contentScrollController,
