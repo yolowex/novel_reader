@@ -23,9 +23,9 @@ class PdfView extends StatelessWidget {
     });
 
     return Focus(
-      onKeyEvent: (FocusNode node,KeyEvent event) {
-        // Prevent focus change on arrow keys
-        
+      onKeyEvent: (FocusNode node, KeyEvent event) {
+        // Prevent focus change on arrow key
+
         if (event is KeyDownEvent) {
           if (_textFormFieldFocusNode.hasFocus) {
             if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
@@ -38,22 +38,30 @@ class PdfView extends StatelessWidget {
               event.logicalKey == LogicalKeyboardKey.arrowUp ||
               event.logicalKey == LogicalKeyboardKey.arrowDown) {
             // Consume the event to prevent focus change
-            
-            if (event.logicalKey == LogicalKeyboardKey.arrowRight){
+
+            if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
               controller.onGoNextPage();
-            }
-            else if(event.logicalKey == LogicalKeyboardKey.arrowLeft){
+            } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
               controller.onGoPreviousPage();
-            } else if (event.logicalKey == LogicalKeyboardKey.arrowUp){
+            } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
               controller.animateScrollUp();
-            }
-            else if(event.logicalKey == LogicalKeyboardKey.arrowDown){
+            } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
               controller.animateScrollDown();
             }
-            
+
             return KeyEventResult.handled;
           }
+
+          if (event.logicalKey == LogicalKeyboardKey.shiftRight ||
+              event.logicalKey == LogicalKeyboardKey.numpadAdd) {
+            controller.increaseContentTextSize();
+          }
+          if (event.logicalKey == LogicalKeyboardKey.controlRight ||
+              event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
+            controller.decreaseContentTextSize();
+          }
         }
+
         return KeyEventResult.ignored;
       },
       child: Scaffold(
@@ -85,7 +93,7 @@ class PdfView extends StatelessWidget {
                     icon: const Icon(Icons.navigate_before),
                   ),
                   Obx(
-                        () => Row(
+                    () => Row(
                       children: [
                         SizedBox(
                           width: constraints.maxWidth * 0.1,
@@ -95,15 +103,18 @@ class PdfView extends StatelessWidget {
                               textAlign: TextAlign.center,
                               focusNode: _textFormFieldFocusNode,
                               onEditingComplete: () {
-                                _textFormFieldFocusNode.unfocus(); // Dismiss the keyboard
-                                controller.onChangePageSubmit(); // Call on submit
+                                _textFormFieldFocusNode
+                                    .unfocus(); // Dismiss the keyboard
+                                controller
+                                    .onChangePageSubmit(); // Call on submit
                               },
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                               ],
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 isDense: true,
                               ),
                               controller: controller.currentPageTextController,
@@ -139,8 +150,13 @@ class PdfView extends StatelessWidget {
             width: double.infinity,
             color: Colors.grey.shade500,
             child: Obx(
-                  () => Center(
-                child: Text(controller.contentString.value),
+              () => Center(
+                child: Text(
+                  controller.contentString.value,
+                  style: controller.contentTextStyle.copyWith(
+                    fontSize: controller.contentTextFontSize.value,
+                  ),
+                ),
               ),
             ),
           ),
