@@ -12,6 +12,26 @@ class PdfViewController extends GetxController {
   late TextEditingController currentPageTextController =
       TextEditingController(text: "${selectedPdfPage.value}");
 
+
+
+  void animateScrollDown() {
+    // Animate down by 100 pixels
+    contentScrollController.animateTo(
+      contentScrollController.position.pixels + 65,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void animateScrollUp() {
+    // Animate up by 100 pixels
+    contentScrollController.animateTo(
+      contentScrollController.position.pixels - 65,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void updateContent() async {
     var loginController = Get.find<LoginPageController>();
 
@@ -51,7 +71,7 @@ class PdfViewController extends GetxController {
     contentScrollController.jumpTo(0);
   }
 
-  void onNext() {
+  void onGoNextPage() {
     var loginController = Get.find<LoginPageController>();
     var tmp = selectedPdfPage.value;
     tmp += 1;
@@ -61,7 +81,7 @@ class PdfViewController extends GetxController {
     onSelectedPageUpdate(tmp);
   }
 
-  void onPrevious() {
+  void onGoPreviousPage() {
     var tmp = selectedPdfPage.value;
     tmp -= 1;
     if (tmp < 1) tmp = 1;

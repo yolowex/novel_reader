@@ -8,27 +8,62 @@ import '../controllers/login_page_controller.dart';
 class PdfView extends StatelessWidget {
   final loginController = Get.find<LoginPageController>();
   final controller = Get.find<PdfViewController>();
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _textFormFieldFocusNode = FocusNode();
 
   PdfView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Listen for focus changes
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
+    _textFormFieldFocusNode.addListener(() {
+      if (!_textFormFieldFocusNode.hasFocus) {
         // User clicked away
         controller.onChangePageCancel();
       }
     });
 
-    return Scaffold(
-      body: Column(
-        children: [
-          _buildHeader(context),
-          _buildPdfContent(),
-          _buildFooter(),
-        ],
+    return Focus(
+      onKeyEvent: (FocusNode node,KeyEvent event) {
+        // Prevent focus change on arrow keys
+        
+        if (event is KeyDownEvent) {
+          if (_textFormFieldFocusNode.hasFocus) {
+            if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+                event.logicalKey == LogicalKeyboardKey.arrowRight) {
+              return KeyEventResult.ignored;
+            }
+          }
+          if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+              event.logicalKey == LogicalKeyboardKey.arrowRight ||
+              event.logicalKey == LogicalKeyboardKey.arrowUp ||
+              event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            // Consume the event to prevent focus change
+            
+            if (event.logicalKey == LogicalKeyboardKey.arrowRight){
+              controller.onGoNextPage();
+            }
+            else if(event.logicalKey == LogicalKeyboardKey.arrowLeft){
+              controller.onGoPreviousPage();
+            } else if (event.logicalKey == LogicalKeyboardKey.arrowUp){
+              controller.animateScrollUp();
+            }
+            else if(event.logicalKey == LogicalKeyboardKey.arrowDown){
+              controller.animateScrollDown();
+            }
+            
+            return KeyEventResult.handled;
+          }
+        }
+        return KeyEventResult.ignored;
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            _buildHeader(context),
+            _buildPdfContent(),
+            _buildFooter(),
+          ],
+        ),
       ),
     );
   }
@@ -46,7 +81,7 @@ class PdfView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: controller.onPrevious,
+                    onPressed: controller.onGoPreviousPage,
                     icon: const Icon(Icons.navigate_before),
                   ),
                   Obx(
@@ -58,9 +93,9 @@ class PdfView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: TextFormField(
                               textAlign: TextAlign.center,
-                              focusNode: _focusNode,
+                              focusNode: _textFormFieldFocusNode,
                               onEditingComplete: () {
-                                _focusNode.unfocus(); // Dismiss the keyboard
+                                _textFormFieldFocusNode.unfocus(); // Dismiss the keyboard
                                 controller.onChangePageSubmit(); // Call on submit
                               },
                               inputFormatters: [
@@ -82,7 +117,7 @@ class PdfView extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: controller.onNext,
+                    onPressed: controller.onGoNextPage,
                     icon: const Icon(Icons.navigate_next),
                   ),
                 ],
